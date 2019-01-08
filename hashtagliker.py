@@ -5,6 +5,7 @@ import convNetColorNetwork
 import time
 import threading
 import settings
+import cfg
 
 from classificationNetwork import ClassificationNetwork
 from InstagramAPI import InstagramAPI
@@ -54,7 +55,11 @@ class HashtagLiker(threading.Thread):
             if str_label == "like":
                 api.like(url[1])
                 time.sleep(2.5)
-                #self.likePicturesByUsername(api, url, network)
+                if cfg.mode == 2:
+                    self.likePicturesByUsername(api, url, network)
+                elif cfg.mode == 3:
+                    self.likeLikersPictures(api,url,network)
+
 
         return next_max_id
 
@@ -96,3 +101,31 @@ class HashtagLiker(threading.Thread):
             with open('followed_users.txt', 'a') as outfile:
                 outfile.write("\n" + str(url[2]))
                 outfile.close()
+
+    def likeLikersPictures(self, api, url, network):
+        likers_count = 1
+        img_path = "images/tmp/img.jpg"
+        api.getMediaLikers(url[1])
+        imageLikers = ImageLoader.getImageLikers(api.LastJson)
+        for liker in imageLikers:
+            if likers_count % 10  == 0:
+                return
+            elif not liker[1]:
+                if not liker[0] == 321882169:
+                    self.likeLikersPicture(api, liker[0], network)
+                    time.sleep(2)
+            likers_count = likers_count + 1
+
+    def likeLikersPicture(self, api, userId, network):
+        img_path = "images/tmp/img.jpg"
+        api.getUserFeed(userId)
+        userImagesURLs = ImageLoader.getImageURLsByUsername(api.LastJson)
+        for url in tqdm(userImagesURLs):
+            urllib.request.urlretrieve(url[0], img_path)
+            img = dataLoader.load_image(img_path, img_size=200)
+            probability, str_label, label = network.predict(img)
+
+            if str_label == "like":
+                api.like(url[1])
+                time.sleep(3.2)
+                return

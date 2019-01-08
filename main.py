@@ -24,7 +24,7 @@ def main():
     # unfollower.join()
     # popularhashtags = ["dandy", "switzerland", "suitup", "travel", "classy", "car", "zurich", "style", "luzern", "ootd", "instagood"]
     # popularhashtags = ["travel", "blogger", "picoftheday", "vintage", "modamasculina", "fashion", "luzern", "switzerland", "dapper", "wedding", "fashionpost", "lucerne", "fashionphotography", "gentleman", "suit", "tie", "pocketsquare", "ootd", "instagood"]
-    popularhashtags = ["luzern", "switzerland", "dapper", "wedding", "fashionpost", "lucerne", "fashionphotography", "mensfashion", "gentleman", "suit", "tie", "pocketsquare", "ootd", "instagood"]
+    popularhashtags = ["dapperdandy", "gentlemanstyle", "gentlemanlike", "fashionpost", "lucerne", "fashionphotography", "mensfashion", "gentleman", "suit", "tie", "pocketsquare", "ootd", "instagood", "classydapper"]
     for hashtag in popularhashtags:
         print('################################')
         print('## Starting Liker for Hashtag #' + hashtag)
