@@ -108,10 +108,10 @@ class HashtagLiker(threading.Thread):
         api.getMediaLikers(url[1])
         imageLikers = ImageLoader.getImageLikers(api.LastJson)
         for liker in imageLikers:
-            if likers_count % 10  == 0:
+            if likers_count % 7  == 0:
                 return
-            elif not liker[1]:
-                if not liker[0] == 321882169:
+            elif not liker[1]: #check if account is private
+                if not liker[0] == 321882169: #check if it is my account
                     self.likeLikersPicture(api, liker[0], network)
                     time.sleep(2)
             likers_count = likers_count + 1
@@ -120,6 +120,7 @@ class HashtagLiker(threading.Thread):
         img_path = "images/tmp/img.jpg"
         api.getUserFeed(userId)
         userImagesURLs = ImageLoader.getImageURLsByUsername(api.LastJson)
+        count_likes = 0
         for url in tqdm(userImagesURLs):
             urllib.request.urlretrieve(url[0], img_path)
             img = dataLoader.load_image(img_path, img_size=200)
@@ -127,5 +128,6 @@ class HashtagLiker(threading.Thread):
 
             if str_label == "like":
                 api.like(url[1])
-                time.sleep(3.2)
-                return
+                time.sleep(2)
+                if count_likes >= 2:
+                    return
