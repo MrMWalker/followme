@@ -129,5 +129,6 @@ class HashtagLiker(threading.Thread):
             if str_label == "like":
                 api.like(url[1])
                 time.sleep(2)
+                count_likes = count_likes + 1
                 if count_likes >= 2:
                     return
