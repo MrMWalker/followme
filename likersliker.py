@@ -39,16 +39,17 @@ class LikersLiker(threading.Thread):
         if api.login():
             print("Login succes!")
 
-            api.getMediaLikers('1829875825206494802')
+            api.getMediaLikers('1981826810129522964_4775415179')
             imageLikers = ImageLoader.getImageLikers(api.LastJson)
             user_count = 1
-            for imageLiker in imageLikers:
+            for imageLiker in imageLikers[40:]:
                 if user_count % 98 == 0:
-                    time.sleep(int((random.random()+0.2)*2144))
+                    time.sleep(int((random.random()+0.2)*100))
                 if not imageLiker[1]:
                     self.likePicturesByUsername(api, imageLiker[0], network)
                     time.sleep(4)
                 user_count = user_count + 1
+                print(user_count)
             api.logout()
 
         else:
@@ -66,20 +67,20 @@ class LikersLiker(threading.Thread):
             probability, str_label, label = network.predict(img)
 
             if str_label == "like":
-                api.like(url[1])
+                self.like(api, url)
                 like_count_by_user = like_count_by_user + 1
-                time.sleep(3.2)
-        if like_count_by_user >= 4:
-            api.follow(url[2])
-            print("followed user" + str(url[2]))
-            with open('followed_users.txt', 'a') as outfile:
-                outfile.write("\n" + str(url[2]))
-                outfile.close()
+                time.sleep(1.5)
+                if like_count_by_user >= 2:
+                    return
+        #if like_count_by_user >= 4:
+         #   api.follow(url[2])
+          #  print("followed user" + str(url[2]))
+           # with open('followed_users.txt', 'a') as outfile:
+            #    outfile.write("\n" + str(url[2]))
+             #   outfile.close()
 
-
-
-
-
-
-
-
+    def like(self, api, url):
+        api.like(url[1])
+        with open('interacted_users.txt', 'a') as outfile:
+            outfile.write("\n" + str(url[2]))
+            outfile.close()

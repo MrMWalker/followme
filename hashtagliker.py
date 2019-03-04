@@ -53,8 +53,8 @@ class HashtagLiker(threading.Thread):
             # tqdm.write("{0}: Prediction: {1}, Probability: {2:.5f}".format(datetime.now(), str_label, probability))
 
             if str_label == "like":
-                api.like(url[1])
-                time.sleep(2.5)
+                self.like(api, url)
+                time.sleep(2)
                 if cfg.mode == 2:
                     self.likePicturesByUsername(api, url, network)
                 elif cfg.mode == 3:
@@ -92,9 +92,9 @@ class HashtagLiker(threading.Thread):
             probability, str_label, label = network.predict(img)
 
             if str_label == "like":
-                api.like(url[1])
+                self.like(api, url)
                 like_count_by_user = like_count_by_user + 1
-                time.sleep(3.2)
+                time.sleep(2)
         if like_count_by_user >= 4:
             api.follow(url[2])
             print("followed user" + str(url[2]))
@@ -127,8 +127,14 @@ class HashtagLiker(threading.Thread):
             probability, str_label, label = network.predict(img)
 
             if str_label == "like":
-                api.like(url[1])
+                self.like(api,url)
                 time.sleep(2)
                 count_likes = count_likes + 1
                 if count_likes >= 2:
                     return
+
+    def like(self, api, url):
+        api.like(url[1])
+        with open('interacted_users.txt', 'a') as outfile:
+            outfile.write("\n" + str(url[2]))
+            outfile.close()
